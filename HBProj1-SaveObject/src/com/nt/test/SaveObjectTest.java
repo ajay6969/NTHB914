@@ -1,7 +1,6 @@
 package com.nt.test;
 
 
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,33 +18,22 @@ public class SaveObjectTest {
 		 Product prod=null;
 		 Transaction tx=null;
 		 boolean flag=false;
-		 int idval=0;
 		 //Activate Hibernate f/w (BootStrap hibernate)
 		  cfg=new Configuration();
-		    System.out.println(cfg.getProperties());
-		    System.out.println("...........................");
 		  //supply hiberante cfg file as input file
 		  cfg.configure("com/nt/cfgs/hibernate.cfg.xml");
-		    // cfg.configure();
-		  System.out.println(cfg.getProperties());
 		  //build Session Factory
 		  factory=cfg.buildSessionFactory();
-		  System.out.println("sessionFactory object class name::"+factory.getClass());
 		  //open Session
 		  ses=factory.openSession();
-		   System.out.println("session object class name::"+ses.getClass());
 		  //create Entity  object to save with Db s/w
-		prod=new Product();
-		 prod.setPname("chair");
-		
+		  prod=new Product();
+		  prod.setPid(442); prod.setPname("chair"); prod.setPrice(60000); prod.setQty(2);
 		  try {
 			  tx=ses.beginTransaction();    //internally calls  con.setAutoCommit(false) to begin the Tx
-			  System.out.println("tx objecct class name::"+tx.getClass());
 			      //save object
-			     idval=(int)ses.save(prod);
-			     System.out.println("Generated id value ::"+idval);
+			     ses.save(prod);
 			     flag=true;
-			     System.out.println("id value ::"+prod.getPid());
 		  }
 		  catch(HibernateException he) {
 			  he.printStackTrace();
@@ -55,7 +43,7 @@ public class SaveObjectTest {
 			   //commit or rollback  Tx
 			    if(flag==true) {
 			    	   tx.commit();  //internally calls con.commit()
-			    	
+			    	   System.out.println("Object is saved");
 			    }
 			    else {
 			    	tx.rollback(); //internally calls  con.rollback()
@@ -65,8 +53,8 @@ public class SaveObjectTest {
 			    //close  session object
 			    ses.close();
 			    //close SessionFactroy
-	   		    factory.close();
-		  }//finally  */
+			    factory.close();
+		  }//finally
 		  
 
 	}//main
